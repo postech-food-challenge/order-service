@@ -1,7 +1,9 @@
 package com.fiap.postech.domain.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
+import com.fiap.postech.infrastructure.controller.dto.OrderResponse
 import com.fiap.postech.infrastructure.persistence.entities.OrderEntity
 import java.time.LocalDateTime
 
@@ -36,19 +38,18 @@ data class Order(
             )
         }
 
-//        fun fromEntity(entity: OrderEntity, objectMapper: ObjectMapper): Order {
-//            val items: List<OrderItem> = objectMapper.treeToValue(entity.itemsData)
-//            return Order(
-//                entity.id,
-//                entity.customerCpf?.let { CPF(it) },
-//                items,
-//                OrderStatus.valueOf(entity.status),
-//                entity.createdAt,
-//                entity.paymentValidated,
-//                entity.price,
-//                entity.qrData,
-//                entity.inStoreOrderId
-//            )
-//        }
+        fun fromEntity(entity: OrderEntity, objectMapper: ObjectMapper): Order {
+            val items: List<OrderItem> = objectMapper.treeToValue(entity.itemsData)
+            return Order(
+                entity.id,
+                entity.customerCpf?.let { CPF(it) },
+                items,
+                OrderStatus.valueOf(entity.status),
+                entity.createdAt,
+                entity.paymentValidated,
+                entity.price,
+                entity.qrData
+            )
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.fiap.postech.infrastructure.controller
+package com.fiap.postech.infrastructure.controller.dto
 
 import com.fiap.postech.domain.entities.OrderItem
 
@@ -14,6 +14,13 @@ class OrderItemResponse(
             domainObject.quantity,
             domainObject.observations,
             domainObject.toGo
+        )
+
+        fun OrderItem.toResponse() = OrderItemResponse(
+            this.productId,
+            this.quantity,
+            this.observations,
+            this.toGo
         )
     }
 }

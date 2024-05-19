@@ -6,10 +6,9 @@ import com.fiap.postech.application.gateways.ProductGateway
 import com.fiap.postech.application.usecases.payment.CreatePaymentInteract
 import com.fiap.postech.domain.entities.Order
 import com.fiap.postech.domain.entities.OrderItem
-import com.fiap.postech.infrastructure.controller.CheckoutRequest
-import com.fiap.postech.infrastructure.controller.OrderResponse
+import com.fiap.postech.infrastructure.controller.dto.CheckoutRequest
+import com.fiap.postech.infrastructure.controller.dto.OrderResponse
 import java.util.UUID
-import kotlin.random.Random
 
 class OrderCheckoutInteract(
     private val orderGateway: OrderGateway,
@@ -34,6 +33,8 @@ class OrderCheckoutInteract(
         val orderUuid = UUID.randomUUID()
         val customerCpf = request.cpf?.let(customerGateway::findByCpf)?.cpf
         val createPaymentResponse = createPaymentInteract.createPayment(orderItems, orderUuid)
+
+        //TODO: start de kitchen
 
         return Order.createOrder(customerCpf, orderItems, createPaymentResponse).run {
             orderGateway.save(this)

@@ -1,4 +1,4 @@
-package com.fiap.postech.infrastructure.controller
+package com.fiap.postech.infrastructure.controller.dto
 
 import org.valiktor.functions.hasSize
 import org.valiktor.functions.isNotEmpty

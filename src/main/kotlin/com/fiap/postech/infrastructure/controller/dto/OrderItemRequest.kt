@@ -1,4 +1,4 @@
-package com.fiap.postech.infrastructure.controller
+package com.fiap.postech.infrastructure.controller.dto
 
 import org.valiktor.validate
 import org.valiktor.functions.isNotNull

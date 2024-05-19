@@ -1,6 +1,7 @@
-package com.fiap.postech.infrastructure.controller
+package com.fiap.postech.infrastructure.controller.dto
 
 import com.fiap.postech.domain.entities.Order
+import com.fiap.postech.infrastructure.controller.dto.OrderItemResponse.Companion.toResponse
 import java.time.LocalDateTime
 
 class OrderResponse(
@@ -21,6 +22,18 @@ class OrderResponse(
                     domainObject.status.name,
                     domainObject.createdAt,
                     domainObject.qrData
+                )
+            }
+
+        fun Order.toOrderResponse() =
+            this.id?.let {
+                OrderResponse(
+                    id,
+                    customerCpf.toString(),
+                    items.map { it.toResponse() },
+                    status.name,
+                    createdAt,
+                    qrData
                 )
             }
     }
