@@ -1,6 +1,8 @@
 package com.fiap.postech
 
-import com.fiap.postech.plugins.*
+import com.fiap.postech.configuration.configureDatabases
+import com.fiap.postech.configuration.configureRouting
+import com.fiap.postech.configuration.configureSerialization
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*

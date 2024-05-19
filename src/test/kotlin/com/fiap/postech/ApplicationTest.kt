@@ -1,6 +1,6 @@
 package com.fiap.postech
 
-import com.fiap.postech.plugins.*
+import com.fiap.postech.configuration.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
