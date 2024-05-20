@@ -1,8 +1,6 @@
 package com.fiap.postech
 
-import com.fiap.postech.configuration.configureDatabases
-import com.fiap.postech.configuration.configureRouting
-import com.fiap.postech.configuration.configureSerialization
+import com.fiap.postech.configuration.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -14,6 +12,10 @@ fun main() {
 
 fun Application.module() {
     configureSerialization()
-    configureDatabases()
+    DatabaseSingleton.init(environment.config, log)
     configureRouting()
+    configureKoin()
+    configureExceptionsResponse()
 }
+
+

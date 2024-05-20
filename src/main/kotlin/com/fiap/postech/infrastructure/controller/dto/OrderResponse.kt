@@ -1,15 +1,14 @@
 package com.fiap.postech.infrastructure.controller.dto
 
 import com.fiap.postech.domain.entities.Order
-import com.fiap.postech.infrastructure.controller.dto.OrderItemResponse.Companion.toResponse
-import java.time.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 class OrderResponse(
-    val orderId: Long,
+    val orderId: String,
     val cpf: String?,
-    val items: List<OrderItemResponse>,
     val status: String,
-    val createdAt: LocalDateTime,
+    val createdAt: String,
     val qrData: String? = null
 ) {
     companion object {
@@ -18,9 +17,8 @@ class OrderResponse(
                 OrderResponse(
                     order,
                     domainObject.customerCpf?.value,
-                    domainObject.items.map { orderItem -> OrderItemResponse.fromDomain(orderItem) },
                     domainObject.status.name,
-                    domainObject.createdAt,
+                    domainObject.createdAt.toString(),
                     domainObject.qrData
                 )
             }
@@ -29,10 +27,9 @@ class OrderResponse(
             this.id?.let {
                 OrderResponse(
                     id,
-                    customerCpf.toString(),
-                    items.map { it.toResponse() },
+                    customerCpf?.value.toString(),
                     status.name,
-                    createdAt,
+                    createdAt.toString(),
                     qrData
                 )
             }

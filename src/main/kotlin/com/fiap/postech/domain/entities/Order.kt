@@ -1,16 +1,13 @@
 package com.fiap.postech.domain.entities
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
-import com.fiap.postech.infrastructure.controller.dto.OrderResponse
 import com.fiap.postech.infrastructure.persistence.entities.OrderEntity
 import java.time.LocalDateTime
+import java.util.UUID
 
 data class Order(
-    val id: Long? = null,
+    val id: String,
     val customerCpf: CPF? = null,
-    val items: List<OrderItem>,
     val status: OrderStatus,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val paymentValidated: Boolean? = null,
@@ -27,10 +24,10 @@ data class Order(
     }
 
     companion object {
-        fun createOrder(customerId: CPF?, items: List<OrderItem>, createPaymentResponse: CreatePaymentResponse): Order {
+        fun createOrder(orderUuid: UUID, customerId: CPF?, createPaymentResponse: CreatePaymentResponse): Order {
             return Order(
+                id = orderUuid.toString(),
                 customerCpf = customerId,
-                items = items,
                 status = OrderStatus.CREATED,
                 paymentValidated = false,
                 price = createPaymentResponse.totalAmount,
@@ -38,12 +35,10 @@ data class Order(
             )
         }
 
-        fun fromEntity(entity: OrderEntity, objectMapper: ObjectMapper): Order {
-            val items: List<OrderItem> = objectMapper.treeToValue(entity.itemsData)
+        fun fromEntity(entity: OrderEntity): Order {
             return Order(
                 entity.id,
                 entity.customerCpf?.let { CPF(it) },
-                items,
                 OrderStatus.valueOf(entity.status),
                 entity.createdAt,
                 entity.paymentValidated,

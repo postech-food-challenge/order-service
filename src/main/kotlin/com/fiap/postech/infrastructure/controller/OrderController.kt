@@ -1,7 +1,6 @@
 package com.fiap.postech.infrastructure.controller
 
 import com.fiap.postech.application.usecases.order.GetOrderInteract
-import com.fiap.postech.application.usecases.order.ListOrdersInteract
 import com.fiap.postech.application.usecases.order.OrderCheckoutInteract
 import com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
 import com.fiap.postech.domain.getUuidOrThrow
@@ -12,21 +11,18 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.kodein.di.DI
-import org.kodein.di.direct
-import org.kodein.di.instance
+import org.koin.ktor.ext.inject
 
-fun Route.orderRouting(di: DI) {
+fun Route.orderRouting() {
     route("/v1/orders") {
-        getOrders(di)
-        checkout(di)
-        getOrder(di)
-        updateOrder(di)
+        checkout()
+        getOrder()
+        updateOrder()
     }
 }
 
-private fun Route.checkout(di: DI) {
-    val orderCheckoutInteract = di.direct.instance<OrderCheckoutInteract>()
+private fun Route.checkout() {
+    val orderCheckoutInteract : OrderCheckoutInteract by inject()
 
     post("/checkout") {
         val request = call.receive<CheckoutRequest>()
@@ -35,18 +31,8 @@ private fun Route.checkout(di: DI) {
     }
 }
 
-private fun Route.getOrders(di: DI) {
-    val listOrderInteract = di.direct.instance<ListOrdersInteract>()
-
-    get {
-        val request = call.receive<OrderStatusRequest>()
-
-        call.respond(HttpStatusCode.OK, listOrderInteract.getOrders(request.status))
-    }
-}
-
-private fun Route.getOrder(di: DI) {
-    val getOrdersInteract = di.direct.instance<GetOrderInteract>()
+private fun Route.getOrder() {
+    val getOrdersInteract : GetOrderInteract by inject()
 
     get("/{orderId}") {
         val orderId = getUuidOrThrow("orderId")
@@ -55,8 +41,8 @@ private fun Route.getOrder(di: DI) {
     }
 }
 
-private fun Route.updateOrder(di: DI) {
-    val updateOrderStatusInteract = di.direct.instance<UpdateOrderStatusInteract>()
+private fun Route.updateOrder() {
+    val updateOrderStatusInteract : UpdateOrderStatusInteract by inject()
 
     patch("/{orderId}") {
         val orderId = getUuidOrThrow("orderId")

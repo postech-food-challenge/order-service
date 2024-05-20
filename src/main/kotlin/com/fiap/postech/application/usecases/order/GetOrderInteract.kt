@@ -7,7 +7,7 @@ import com.fiap.postech.infrastructure.controller.dto.OrderResponse.Companion.to
 
 class GetOrderInteract(private val orderGateway: OrderGateway) {
 
-    fun getOrder(orderId: String) : OrderResponse {
+    suspend fun getOrder(orderId: String) : OrderResponse {
         val order = orderGateway.findById(orderId)
         return order?.toOrderResponse() ?: throw NoObjectFoundException("No order found for uuid $orderId")
     }

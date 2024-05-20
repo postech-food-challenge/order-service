@@ -12,4 +12,8 @@ data class CPF(val value: String) {
             throw InvalidCpfException("Invalid CPF format. Expected an 11-digit number.")
         }
     }
+
+    companion object {
+        fun String.toCpf() = CPF(value = this)
+    }
 }
