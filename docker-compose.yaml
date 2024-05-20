@@ -6,8 +6,8 @@ services:
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_DB: order
       POSTGRES_USER: food-challenge
-      POSTGRES_DB: orders-db
       POSTGRES_PASSWORD: root
 
   app:
