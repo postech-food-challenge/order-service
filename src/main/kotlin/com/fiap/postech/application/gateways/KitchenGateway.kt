@@ -6,5 +6,5 @@ import java.util.UUID
 
 interface KitchenGateway {
 
-    fun startPreparation(orderId: UUID, items: List<OrderItem>)
+    suspend fun startPreparation(orderId: UUID, items: List<OrderItem>)
 }

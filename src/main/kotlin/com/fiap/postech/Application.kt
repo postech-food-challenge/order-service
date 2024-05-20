@@ -11,10 +11,13 @@ fun main() {
 }
 
 fun Application.module() {
+    val paymentServiceURL = environment.config.property("payment_service.host").getString()
+    val kitchenServiceURL = environment.config.property("kitchen_service.host").getString()
+    val productServiceURL = environment.config.property("product_service.host").getString()
     configureSerialization()
     DatabaseSingleton.init(environment.config, log)
     configureRouting()
-    configureKoin()
+    configureKoin(paymentServiceURL, kitchenServiceURL, productServiceURL)
     configureExceptionsResponse()
 }
 

@@ -2,13 +2,15 @@ package com.fiap.postech.infrastructure.gateways
 
 import com.fiap.postech.application.gateways.KitchenGateway
 import com.fiap.postech.domain.entities.OrderItem
-import com.fiap.postech.infrastructure.client.kitchen.KitchenResponse
-import io.ktor.http.*
+import io.ktor.client.*
+import io.ktor.client.request.*
 import java.util.*
 
-class KitchenClientGateway: KitchenGateway {
+class KitchenClientGateway(val client: HttpClient, val kitchenServiceURL: String): KitchenGateway {
 
-    override fun startPreparation(orderId: UUID, items: List<OrderItem>) {
-        HttpStatusCode.OK
+    override suspend fun startPreparation(orderId: UUID, items: List<OrderItem>) {
+        client.post("$kitchenServiceURL/v1/kitchen/orders/$orderId/start") {
+            setBody(listOf(OrderItem))
+        }
     }
 }

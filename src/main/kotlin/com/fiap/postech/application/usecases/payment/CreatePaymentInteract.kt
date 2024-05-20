@@ -10,7 +10,7 @@ class CreatePaymentInteract(
     private val paymentGateway: PaymentGateway
 ) {
 
-    fun createPayment(orderItems: List<OrderItem>, orderUuid: UUID): CreatePaymentResponse {
+    suspend fun createPayment(orderItems: List<OrderItem>, orderUuid: UUID): CreatePaymentResponse {
         val price = calculatePaymentAmount(orderItems)
 
         return  CreatePaymentRequest.fromDomain(price, orderUuid)

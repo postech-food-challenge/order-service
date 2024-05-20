@@ -5,5 +5,5 @@ import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
 
 interface PaymentGateway {
 
-    fun createPayment(request: CreatePaymentRequest) : CreatePaymentResponse
+    suspend fun createPayment(request: CreatePaymentRequest) : CreatePaymentResponse
 }
