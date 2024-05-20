@@ -1,4 +1,3 @@
-
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -50,6 +49,11 @@ dependencies {
     implementation("org.valiktor:valiktor-core:0.12.0")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("org.postgresql:postgresql:$postgresql_version")
-    testImplementation("io.ktor:ktor-server-tests-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
