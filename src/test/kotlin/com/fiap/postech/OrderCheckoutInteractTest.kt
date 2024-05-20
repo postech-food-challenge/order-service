@@ -8,7 +8,6 @@ import com.fiap.postech.application.usecases.payment.CreatePaymentInteract
 import com.fiap.postech.domain.entities.CPF
 import com.fiap.postech.domain.entities.Order
 import com.fiap.postech.domain.entities.OrderStatus
-import com.fiap.postech.domain.exceptions.InvalidParameterException
 import com.fiap.postech.domain.exceptions.PaymentNotCreatedException
 import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
 import com.fiap.postech.infrastructure.client.product.ProductResponse
