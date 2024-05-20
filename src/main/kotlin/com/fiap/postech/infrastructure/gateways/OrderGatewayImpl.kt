@@ -3,10 +3,10 @@ package com.fiap.postech.infrastructure.gateways
 import com.fiap.postech.application.gateways.OrderGateway
 import com.fiap.postech.domain.entities.Order
 import com.fiap.postech.domain.exceptions.OrderNotFoundException
+import com.fiap.postech.infrastructure.persistence.OrderFacade
 import com.fiap.postech.infrastructure.persistence.entities.OrderEntity
-import com.fiap.postech.infrastructure.persistence.entities.OrderFacade
 
-class OrderGatewayImpl(private val facade: OrderFacade): OrderGateway {
+class OrderGatewayImpl(private val facade: OrderFacade) : OrderGateway {
     override suspend fun save(order: Order): Order {
         OrderEntity.fromDomain(order).let { orderEntity ->
             val savedEntity = facade.insert(orderEntity)

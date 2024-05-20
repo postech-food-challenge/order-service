@@ -1,4 +1,6 @@
-package com.fiap.postech.infrastructure.persistence.entities
+package com.fiap.postech.infrastructure.persistence
+
+import com.fiap.postech.infrastructure.persistence.entities.OrderEntity
 
 interface OrderFacade {
 

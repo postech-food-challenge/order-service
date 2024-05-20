@@ -1,17 +1,17 @@
-version: '3.1'
+version: '3.6'
 
 services:
   db:
-    image: postgres
+    image: postgres:alpine
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_DB: order
       POSTGRES_USER: food-challenge
-      POSTGRES_DB: orders-db
       POSTGRES_PASSWORD: root
 
   app:
-    depends_on: [db]
+    depends_on: [ db ]
     build:
       context: .
       dockerfile: Dockerfile
