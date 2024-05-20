@@ -1,12 +1,14 @@
-package com.fiap.postech.infrastructure.persistence.entities
+package com.fiap.postech.infrastructure.persistence
 
 import com.fiap.postech.configuration.DatabaseSingleton.dbQuery
 import com.fiap.postech.domain.exceptions.DatabaseOperationException
+import com.fiap.postech.infrastructure.persistence.entities.OrderEntity
+import com.fiap.postech.infrastructure.persistence.entities.Orders
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
-class OrderFacadeImpl: OrderFacade {
+class OrderFacadeImpl : OrderFacade {
 
     private fun resultRowToOrderEntity(row: ResultRow?): OrderEntity? {
         return if (row == null) {
@@ -23,6 +25,7 @@ class OrderFacadeImpl: OrderFacade {
             )
         }
     }
+
     override suspend fun insert(order: OrderEntity): OrderEntity = dbQuery {
         Orders.insert {
             it[orderId] = order.id
@@ -39,7 +42,7 @@ class OrderFacadeImpl: OrderFacade {
 
     override suspend fun findById(id: String): OrderEntity? = dbQuery {
         Orders
-            .select {Orders.orderId eq id}
+            .select { Orders.orderId eq id }
             .map(::resultRowToOrderEntity)
             .singleOrNull()
     }

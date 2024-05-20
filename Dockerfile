@@ -1,9 +1,10 @@
-FROM gradle:8.3.0-jdk17 AS build
-
+FROM gradle:8.4.0-jdk17 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
-
 WORKDIR /home/gradle/src
+RUN gradle buildFatJar --no-daemon
 
-RUN gradle build
-
-RUN mkdir /app && cp /home/gradle/src/build/libs/com.fiap.postech.order-0.0.1.jar /app/com.fiap.postech.order.jar
+FROM eclipse-temurin:17-jdk-alpine
+EXPOSE 8080:8080
+RUN mkdir /app
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/order.jar
+ENTRYPOINT ["java","-jar","/app/order.jar"]

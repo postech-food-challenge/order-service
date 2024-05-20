@@ -1,19 +1,9 @@
 package com.fiap.postech.infrastructure.persistence.entities
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.fiap.postech.domain.entities.Order
-import com.fiap.postech.domain.entities.OrderItem
-import kotlinx.serialization.json.Json
-//import io.ktor.features.json.Json
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.json.json
 import java.time.LocalDateTime
-
 
 object Orders : LongIdTable("orders") {
     val orderId = varchar("order_id", 36)

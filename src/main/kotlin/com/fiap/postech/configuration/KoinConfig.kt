@@ -12,14 +12,14 @@ import com.fiap.postech.infrastructure.gateways.KitchenClientGateway
 import com.fiap.postech.infrastructure.gateways.OrderGatewayImpl
 import com.fiap.postech.infrastructure.gateways.PaymentClientGateway
 import com.fiap.postech.infrastructure.gateways.ProductClientGateway
-import com.fiap.postech.infrastructure.persistence.entities.OrderFacade
-import com.fiap.postech.infrastructure.persistence.entities.OrderFacadeImpl
+import com.fiap.postech.infrastructure.persistence.OrderFacade
+import com.fiap.postech.infrastructure.persistence.OrderFacadeImpl
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.server.application.*
-import org.koin.ktor.plugin.Koin
 import org.koin.dsl.module
+import org.koin.ktor.plugin.Koin
 
 fun Application.configureKoin(
     paymentServiceURL: String,
@@ -41,9 +41,9 @@ private fun module(paymentServiceURL: String, kitchenServiceURL: String, product
     single<HttpClient> { client }
     single<OrderFacade> { OrderFacadeImpl() }
     single<OrderGateway> { OrderGatewayImpl(get()) }
-    single <ProductGateway> { ProductClientGateway(get(), productServiceURL) }
-    single <KitchenGateway> { KitchenClientGateway(get(), kitchenServiceURL) }
-    single <PaymentGateway> { PaymentClientGateway(get(), paymentServiceURL) }
+    single<ProductGateway> { ProductClientGateway(get(), productServiceURL) }
+    single<KitchenGateway> { KitchenClientGateway(get(), kitchenServiceURL) }
+    single<PaymentGateway> { PaymentClientGateway(get(), paymentServiceURL) }
     single { OrderCheckoutInteract(get(), get(), get(), get()) }
     single { GetOrderInteract(get()) }
     single { UpdateOrderStatusInteract(get()) }
