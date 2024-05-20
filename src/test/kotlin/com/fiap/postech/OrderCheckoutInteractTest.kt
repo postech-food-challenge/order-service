@@ -8,6 +8,8 @@ import com.fiap.postech.application.usecases.payment.CreatePaymentInteract
 import com.fiap.postech.domain.entities.CPF
 import com.fiap.postech.domain.entities.Order
 import com.fiap.postech.domain.entities.OrderStatus
+import com.fiap.postech.domain.exceptions.InvalidParameterException
+import com.fiap.postech.domain.exceptions.PaymentNotCreatedException
 import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
 import com.fiap.postech.infrastructure.client.product.ProductResponse
 import com.fiap.postech.infrastructure.controller.dto.CheckoutRequest
@@ -17,9 +19,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 import java.time.LocalDateTime
 import java.util.*
@@ -80,6 +83,19 @@ class OrderCheckoutInteractTest {
 
             assertNotNull(result)
             assertNotNull(result.orderId)
+        }
+    }
+
+    @Test
+    fun `should not save order when payment fails`() {
+        runBlocking {
+            val orderId = UUID.randomUUID()
+            val product = ProductResponse(1L, "Burger", "Delicious", "image.png", 10, "MAIN")
+
+            whenever(productGateway.getProduct(1L)).thenReturn(product)
+            whenever(createPaymentInteract.createPayment(any(), any())).thenThrow(PaymentNotCreatedException("Error while creating payment. Order $orderId not created"))
+
+            verify(orderGateway, times(0)).save(any())
         }
     }
 }
