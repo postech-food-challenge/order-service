@@ -1,4 +1,4 @@
-package com.fiap.postech
+package com.fiap.postech.order
 
 import com.fiap.postech.application.gateways.OrderGateway
 import com.fiap.postech.application.usecases.order.GetOrderInteract

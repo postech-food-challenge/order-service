@@ -86,9 +86,9 @@ tasks.jacocoTestReport {
         files(classDirectories.files.map {
             fileTree(it) {
                 exclude(
-                    "br/com/fiap/postech/domain/**",
-                    "br/com/fiap/postech/configuration/**",
-                    "br/com/fiap/postech/infraestucture/**"
+                    "com/fiap/postech/domain/**",
+                    "com/fiap/postech/configuration/**",
+                    "com/fiap/postech/infrastructure/**",
                 )
             }
         })
