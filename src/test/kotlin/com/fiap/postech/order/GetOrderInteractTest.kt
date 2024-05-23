@@ -1,14 +1,10 @@
 package com.fiap.postech.order
 
-import com.fiap.postech.application.gateways.OrderGateway
-import com.fiap.postech.application.usecases.order.GetOrderInteract
-import com.fiap.postech.domain.entities.CPF
-import com.fiap.postech.domain.entities.Order
-import com.fiap.postech.domain.entities.OrderStatus
-import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
-import com.fiap.postech.infrastructure.client.product.ProductResponse
-import com.fiap.postech.infrastructure.controller.dto.CheckoutRequest
-import com.fiap.postech.infrastructure.controller.dto.OrderItemRequest
+import br.com.fiap.postech.application.gateways.OrderGateway
+import br.com.fiap.postech.application.usecases.order.GetOrderInteract
+import br.com.fiap.postech.domain.entities.CPF
+import br.com.fiap.postech.domain.entities.Order
+import br.com.fiap.postech.domain.entities.OrderStatus
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach

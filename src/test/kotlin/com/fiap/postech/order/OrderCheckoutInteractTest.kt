@@ -1,18 +1,18 @@
 package com.fiap.postech.order
 
-import com.fiap.postech.application.gateways.KitchenGateway
-import com.fiap.postech.application.gateways.OrderGateway
-import com.fiap.postech.application.gateways.ProductGateway
-import com.fiap.postech.application.usecases.order.OrderCheckoutInteract
-import com.fiap.postech.application.usecases.payment.CreatePaymentInteract
-import com.fiap.postech.domain.entities.CPF
-import com.fiap.postech.domain.entities.Order
-import com.fiap.postech.domain.entities.OrderStatus
-import com.fiap.postech.domain.exceptions.PaymentNotCreatedException
-import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
-import com.fiap.postech.infrastructure.client.product.ProductResponse
-import com.fiap.postech.infrastructure.controller.dto.CheckoutRequest
-import com.fiap.postech.infrastructure.controller.dto.OrderItemRequest
+import br.com.fiap.postech.application.gateways.KitchenGateway
+import br.com.fiap.postech.application.gateways.OrderGateway
+import br.com.fiap.postech.application.gateways.ProductGateway
+import br.com.fiap.postech.application.usecases.order.OrderCheckoutInteract
+import br.com.fiap.postech.application.usecases.payment.CreatePaymentInteract
+import br.com.fiap.postech.domain.entities.CPF
+import br.com.fiap.postech.domain.entities.Order
+import br.com.fiap.postech.domain.entities.OrderStatus
+import br.com.fiap.postech.domain.exceptions.PaymentNotCreatedException
+import br.com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
+import br.com.fiap.postech.infrastructure.client.product.ProductResponse
+import br.com.fiap.postech.infrastructure.controller.dto.CheckoutRequest
+import br.com.fiap.postech.infrastructure.controller.dto.OrderItemRequest
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -50,7 +50,8 @@ class OrderCheckoutInteractTest {
             val product = ProductResponse(1L, "Burger", "Delicious", "image.png", 10, "MAIN")
             val orderItemRequest = OrderItemRequest(1L, 2, "Extra cheese", true)
             val checkoutRequest = CheckoutRequest("12345678901", listOf(orderItemRequest))
-            val order = Order(orderId.toString(), CPF("12345678901"),OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA")
+            val order = Order(orderId.toString(), CPF("12345678901"),
+                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA")
             val createPaymentResponse = CreatePaymentResponse(10, "AA", orderId)
 
             whenever(productGateway.getProduct(1L)).thenReturn(product)
@@ -71,7 +72,8 @@ class OrderCheckoutInteractTest {
             val product = ProductResponse(1L, "Burger", "Delicious", "image.png", 10, "MAIN")
             val orderItemRequest = OrderItemRequest(1L, 2, "Extra cheese", true)
             val checkoutRequest = CheckoutRequest(null, listOf(orderItemRequest))
-            val order = Order(orderId.toString(), CPF("12345678901"),OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA")
+            val order = Order(orderId.toString(), CPF("12345678901"),
+                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA")
             val createPaymentResponse = CreatePaymentResponse(10, "AA", orderId)
 
             whenever(productGateway.getProduct(1L)).thenReturn(product)

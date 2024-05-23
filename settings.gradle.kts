@@ -1,1 +1,1 @@
-rootProject.name = "com.fiap.postech.order"
+rootProject.name = "order-service"
