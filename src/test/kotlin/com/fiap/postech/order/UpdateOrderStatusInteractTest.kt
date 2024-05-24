@@ -1,11 +1,10 @@
 package com.fiap.postech.order
 
-import com.fiap.postech.application.gateways.OrderGateway
-import com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
-import com.fiap.postech.domain.entities.Order
-import com.fiap.postech.domain.entities.OrderStatus
-import com.fiap.postech.domain.exceptions.InvalidParameterException
-import com.fiap.postech.domain.exceptions.NoObjectFoundException
+import br.com.fiap.postech.application.gateways.OrderGateway
+import br.com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
+import br.com.fiap.postech.domain.entities.Order
+import br.com.fiap.postech.domain.entities.OrderStatus
+import br.com.fiap.postech.domain.exceptions.InvalidParameterException
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals

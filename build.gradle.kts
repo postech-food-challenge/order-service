@@ -14,11 +14,11 @@ plugins {
     id("jacoco")
 }
 
-group = "com.fiap.postech"
+group = "br.com.fiap.postech"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.fiap.postech.ApplicationKt")
+    mainClass.set("br.com.fiap.postech.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -26,10 +26,15 @@ application {
 
 sonar {
     properties {
-        property("sonar.projectKey", "postech-food-challenge_order")
+        property("sonar.gradle.skipCompile", "true")
+        property("sonar.projectKey", "postech-food-challenge_order-service")
         property("sonar.organization", "postech-food-challenge")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory}/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property(
+            "sonar.coverage.exclusions",
+            "**/br/com/fiap/postech/domain/**,**/br/com/fiap/postech/configuration/**,**/br/com/fiap/postech/infrastructure/**"
+        )
     }
 }
 
@@ -86,9 +91,9 @@ tasks.jacocoTestReport {
         files(classDirectories.files.map {
             fileTree(it) {
                 exclude(
-                    "com/fiap/postech/domain/**",
-                    "com/fiap/postech/configuration/**",
-                    "com/fiap/postech/infrastructure/**",
+                    "**/br/com/fiap/postech/domain/**",
+                    "**/br/com/fiap/postech/configuration/**",
+                    "**/br/com/fiap/postech/infrastructure/**"
                 )
             }
         })

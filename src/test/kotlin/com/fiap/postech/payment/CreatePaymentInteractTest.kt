@@ -1,11 +1,9 @@
 package com.fiap.postech.payment
 
-import com.fiap.postech.application.gateways.PaymentGateway
-import com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
-import com.fiap.postech.application.usecases.payment.CreatePaymentInteract
-import com.fiap.postech.domain.entities.OrderItem
-import com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
-import com.fiap.postech.infrastructure.controller.dto.OrderItemRequest
+import br.com.fiap.postech.application.gateways.PaymentGateway
+import br.com.fiap.postech.application.usecases.payment.CreatePaymentInteract
+import br.com.fiap.postech.domain.entities.OrderItem
+import br.com.fiap.postech.infrastructure.client.payment.CreatePaymentResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
