@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -29,10 +27,14 @@ application {
 sonar {
     properties {
         property("sonar.gradle.skipCompile", "true")
-        property("sonar.projectKey", "postech-food-challenge_order")
+        property("sonar.projectKey", "postech-food-challenge_order-service")
         property("sonar.organization", "postech-food-challenge")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory}/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property(
+            "sonar.coverage.exclusions",
+            "**/br/com/fiap/postech/domain/**,**/br/com/fiap/postech/configuration/**,**/br/com/fiap/postech/infrastructure/**"
+        )
     }
 }
 
@@ -89,9 +91,9 @@ tasks.jacocoTestReport {
         files(classDirectories.files.map {
             fileTree(it) {
                 exclude(
-                    "br/com/fiap/postech/domain/**",
-                    "br/com/fiap/postech/configuration/**",
-                    "br/com/fiap/postech/infrastructure/**"
+                    "**/br/com/fiap/postech/domain/**",
+                    "**/br/com/fiap/postech/configuration/**",
+                    "**/br/com/fiap/postech/infrastructure/**"
                 )
             }
         })
