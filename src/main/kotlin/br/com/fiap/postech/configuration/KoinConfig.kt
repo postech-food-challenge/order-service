@@ -1,17 +1,11 @@
 package br.com.fiap.postech.configuration
 
-import br.com.fiap.postech.application.gateways.KitchenGateway
-import br.com.fiap.postech.application.gateways.OrderGateway
-import br.com.fiap.postech.application.gateways.PaymentGateway
-import br.com.fiap.postech.application.gateways.ProductGateway
+import br.com.fiap.postech.application.gateways.*
 import br.com.fiap.postech.application.usecases.order.GetOrderInteract
 import br.com.fiap.postech.application.usecases.order.OrderCheckoutInteract
 import br.com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
 import br.com.fiap.postech.application.usecases.payment.CreatePaymentInteract
-import br.com.fiap.postech.infrastructure.gateways.KitchenClientGateway
-import br.com.fiap.postech.infrastructure.gateways.OrderGatewayImpl
-import br.com.fiap.postech.infrastructure.gateways.PaymentClientGateway
-import br.com.fiap.postech.infrastructure.gateways.ProductClientGateway
+import br.com.fiap.postech.infrastructure.gateways.*
 import br.com.fiap.postech.infrastructure.persistence.OrderFacade
 import br.com.fiap.postech.infrastructure.persistence.OrderFacadeImpl
 import io.ktor.client.*
@@ -24,14 +18,15 @@ import org.koin.ktor.plugin.Koin
 fun Application.configureKoin(
     paymentServiceURL: String,
     kitchenServiceURL: String,
-    productServiceURL: String
+    productServiceURL: String,
+    customerServiceURL: String
 ) {
     install(Koin) {
-        modules(module(paymentServiceURL, kitchenServiceURL, productServiceURL))
+        modules(module(paymentServiceURL, kitchenServiceURL, productServiceURL, customerServiceURL))
     }
 }
 
-private fun module(paymentServiceURL: String, kitchenServiceURL: String, productServiceURL: String) = module {
+private fun module(paymentServiceURL: String, kitchenServiceURL: String, productServiceURL: String, customerServiceURL: String) = module {
     val client = HttpClient(CIO) {
         install(Logging) {
             level = LogLevel.INFO
@@ -44,7 +39,8 @@ private fun module(paymentServiceURL: String, kitchenServiceURL: String, product
     single<ProductGateway> { ProductClientGateway(get(), productServiceURL) }
     single<KitchenGateway> { KitchenClientGateway(get(), kitchenServiceURL) }
     single<PaymentGateway> { PaymentClientGateway(get(), paymentServiceURL) }
-    single { OrderCheckoutInteract(get(), get(), get(), get()) }
+    single<CustomerGateway> { CustomerClientGateway(get(), customerServiceURL) }
+    single { OrderCheckoutInteract(get(), get(), get(), get(), get()) }
     single { GetOrderInteract(get()) }
     single { UpdateOrderStatusInteract(get()) }
     single { CreatePaymentInteract(get()) }

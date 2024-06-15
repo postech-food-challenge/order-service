@@ -13,3 +13,4 @@ data:
   PRODUCT_SERVICE_HOST: "http://tech-challenge.products.cluster.local:8080/v1/orders"
   KITCHEN_SERVICE_HOST: "http://tech-challenge.kitchen.cluster.local:8080/v1/orders"
   PAYMENT_SERVICE_HOST: "http://tech-challenge.payment-service.cluster.local:8080/v1/orders"
+  CUSTOMER_SERVICE_HOST: "http://tech-challenge.customer-service.cluster.local:8080"
