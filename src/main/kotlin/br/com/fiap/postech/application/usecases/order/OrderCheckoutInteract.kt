@@ -29,11 +29,6 @@ class OrderCheckoutInteract(
 
         customerCpf?.runCatching { customerGateway.checkCustomer(this.value) }
             ?.onFailure { throw CustomerNotFound("Customer with CPF ${customerCpf.value} not found") }
-//        if (customerCpf != null) {
-//            val cpf = customerCpf.value
-//            runCatching { customerGateway.checkCustomer(cpf) }
-//                .onFailure { throw CustomerNotFound("Customer with CPF $cpf not found") }
-//        }
 
         val orderItems = request.items.map { orderItemRequest ->
             productGateway.getProduct(orderItemRequest.productId).let {
