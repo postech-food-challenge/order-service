@@ -9,9 +9,19 @@ services:
       POSTGRES_DB: orders
       POSTGRES_USER: food-challenge
       POSTGRES_PASSWORD: root
+#
+  localstack:
+    image: "localstack/localstack"
+    ports:
+      - "4566:4566"
+    volumes:
+      - "./scripts/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
+    environment:
+      SERVICES: sqs
+      AWS_DEFAULT_REGION: us-east-1
 
   app:
-    depends_on: [ db ]
+    depends_on: [ db, localstack ]
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,3 +33,7 @@ services:
       DB_PORT: 5432
       DB_USERNAME: food-challenge
       DB_PASSWORD: root
+      AWS_BASE_URL: "http://localstack:4566"
+      ORDER_READY_QUEUE_URL: "http://localstack:4566/000000000000/order-ready"
+      START_PREPARATION_QUEUE_URL: "http://localstack:4566/000000000000/start-preparation"
+      PAYMENT_STATUS_UPDATED_QUEUE_URL: "http://localstack:4566/000000000000/payment-status-update"
