@@ -1,5 +1,6 @@
 package br.com.fiap.postech.application.usecases.order
 
+import br.com.fiap.postech.application.gateways.CustomerGateway
 import br.com.fiap.postech.application.gateways.KitchenGateway
 import br.com.fiap.postech.application.gateways.OrderGateway
 import br.com.fiap.postech.application.gateways.ProductGateway
@@ -7,6 +8,7 @@ import br.com.fiap.postech.application.usecases.payment.CreatePaymentInteract
 import br.com.fiap.postech.domain.entities.CPF.Companion.toCpf
 import br.com.fiap.postech.domain.entities.Order
 import br.com.fiap.postech.domain.entities.OrderItem
+import br.com.fiap.postech.domain.exceptions.CustomerNotFound
 import br.com.fiap.postech.domain.exceptions.OrderNotCreatedInKitchen
 import br.com.fiap.postech.domain.exceptions.PaymentNotCreatedException
 import br.com.fiap.postech.infrastructure.controller.dto.CheckoutRequest
@@ -17,12 +19,16 @@ class OrderCheckoutInteract(
     private val orderGateway: OrderGateway,
     private val productGateway: ProductGateway,
     private val createPaymentInteract: CreatePaymentInteract,
-    private val kitchenGateway: KitchenGateway
+    private val kitchenGateway: KitchenGateway,
+    private val customerGateway: CustomerGateway
 ) {
 
     suspend fun checkout(request: CheckoutRequest): OrderResponse {
         val customerCpf = request.cpf?.toCpf()
         val orderUuid = UUID.randomUUID()
+
+        customerCpf?.runCatching { customerGateway.checkCustomer(this.value) }
+            ?.onFailure { throw CustomerNotFound("Customer with CPF ${customerCpf.value} not found") }
 
         val orderItems = request.items.map { orderItemRequest ->
             productGateway.getProduct(orderItemRequest.productId).let {
