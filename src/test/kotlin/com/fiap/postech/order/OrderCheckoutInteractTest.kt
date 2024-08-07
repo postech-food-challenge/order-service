@@ -8,6 +8,7 @@ import br.com.fiap.postech.application.usecases.order.OrderCheckoutInteract
 import br.com.fiap.postech.application.usecases.payment.CreatePaymentInteract
 import br.com.fiap.postech.domain.entities.CPF
 import br.com.fiap.postech.domain.entities.Order
+import br.com.fiap.postech.domain.entities.OrderItem
 import br.com.fiap.postech.domain.entities.OrderStatus
 import br.com.fiap.postech.domain.exceptions.CustomerNotFound
 import br.com.fiap.postech.domain.exceptions.PaymentNotCreatedException
@@ -28,6 +29,8 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 import java.time.LocalDateTime
 import java.util.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class OrderCheckoutInteractTest {
 
@@ -62,7 +65,7 @@ class OrderCheckoutInteractTest {
             val orderItemRequest = OrderItemRequest(1L, 2, "Extra cheese", true)
             val checkoutRequest = CheckoutRequest("12345678901", listOf(orderItemRequest))
             val order = Order(orderId.toString(), CPF("12345678901"),
-                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA")
+                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA", creteListOfOrderItemJson())
             val createPaymentResponse = CreatePaymentResponse(10, "AA", orderId)
 
             whenever(productGateway.getProduct(1L)).thenReturn(product)
@@ -84,7 +87,7 @@ class OrderCheckoutInteractTest {
             val orderItemRequest = OrderItemRequest(1L, 2, "Extra cheese", true)
             val checkoutRequest = CheckoutRequest(null, listOf(orderItemRequest))
             val order = Order(orderId.toString(), CPF("12345678901"),
-                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA")
+                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA", creteListOfOrderItemJson())
             val createPaymentResponse = CreatePaymentResponse(10, "AA", orderId)
 
             whenever(productGateway.getProduct(1L)).thenReturn(product)
@@ -120,7 +123,7 @@ class OrderCheckoutInteractTest {
             val orderItemRequest = OrderItemRequest(1L, 2, "Extra cheese", true)
             val checkoutRequest = CheckoutRequest(cpf, listOf(orderItemRequest))
             val order = Order(orderId.toString(), CPF(cpf),
-                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA")
+                OrderStatus.CREATED, LocalDateTime.now(), true, 10, "AA", creteListOfOrderItemJson())
             val createPaymentResponse = CreatePaymentResponse(10, "AA", orderId)
 
             whenever(customerGateway.checkCustomer(cpf)).thenReturn(Unit)
@@ -148,4 +151,23 @@ class OrderCheckoutInteractTest {
             assertThrows<CustomerNotFound> { orderCheckoutInteract.checkout(checkoutRequest) }
         }
     }
+
+    private fun creteListOfOrderItemJson() = Json.encodeToString(
+        listOf(
+            OrderItem(
+                productId = 1,
+                observations = "Item 1",
+                price = 10,
+                quantity = 1,
+                toGo = false
+            ),
+            OrderItem(
+                productId = 2,
+                observations = "Item 2",
+                price = 10,
+                quantity = 2,
+                toGo = false
+            )
+        )
+    )
 }
