@@ -6,6 +6,7 @@ import br.com.fiap.postech.application.usecases.order.OrderCheckoutInteract
 import br.com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
 import br.com.fiap.postech.application.usecases.payment.CreatePaymentInteract
 import br.com.fiap.postech.infrastructure.gateways.*
+import br.com.fiap.postech.infrastructure.listener.OrderReadyListener
 import br.com.fiap.postech.infrastructure.listener.PaymentStatusUpdateListener
 import br.com.fiap.postech.infrastructure.persistence.OrderFacade
 import br.com.fiap.postech.infrastructure.persistence.OrderFacadeImpl
@@ -78,4 +79,5 @@ private fun module(config: ApplicationConfig ) = module {
     single { UpdateOrderStatusInteract(get(), get()) }
     single { CreatePaymentInteract(get()) }
     single { PaymentStatusUpdateListener(get(), awsConfiguration, get()) }
+    single { OrderReadyListener(get(), awsConfiguration, get()) }
 }

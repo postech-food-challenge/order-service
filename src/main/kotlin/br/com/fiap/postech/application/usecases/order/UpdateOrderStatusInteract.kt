@@ -20,6 +20,7 @@ class UpdateOrderStatusInteract(
 
         if (newStatus == "PAYMENT_CONFIRMED")
             sqsGateway.startOrderPreparation(StartPreparationDTO.fromOrder(order, Json.decodeFromString(order.orderItemsJson)))
+
         return order.toOrderResponse()
     }
 }
