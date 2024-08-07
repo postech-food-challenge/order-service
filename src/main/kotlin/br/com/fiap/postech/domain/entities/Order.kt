@@ -12,7 +12,8 @@ data class Order(
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val paymentValidated: Boolean? = null,
     val price: Int? = null,
-    val qrData: String? = null
+    val qrData: String? = null,
+    val orderItemsJson: String
 ) {
     fun withUpdatedStatus(newStatus: String): Order {
         val updatedStatus = OrderStatus.validateStatus(newStatus)
@@ -24,14 +25,15 @@ data class Order(
     }
 
     companion object {
-        fun createOrder(orderUuid: UUID, customerId: CPF?, createPaymentResponse: CreatePaymentResponse): Order {
+        fun createOrder(orderUuid: UUID, customerId: CPF?, createPaymentResponse: CreatePaymentResponse, orderItemsJson: String): Order {
             return Order(
                 id = orderUuid.toString(),
                 customerCpf = customerId,
                 status = OrderStatus.CREATED,
                 paymentValidated = false,
                 price = createPaymentResponse.totalAmount,
-                qrData = createPaymentResponse.qrData
+                qrData = createPaymentResponse.qrData,
+                orderItemsJson = orderItemsJson
             )
         }
 
@@ -43,7 +45,8 @@ data class Order(
                 entity.createdAt,
                 entity.paymentValidated,
                 entity.price,
-                entity.qrData
+                entity.qrData,
+                entity.orderItemsJson
             )
         }
     }

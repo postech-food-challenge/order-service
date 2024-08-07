@@ -7,7 +7,7 @@ import org.valiktor.validate
 
 @Serializable
 data class CheckoutRequest(
-    val cpf: String?,
+    val cpf: String? = null,
     val items: List<OrderItemRequest>
 ) {
         init {

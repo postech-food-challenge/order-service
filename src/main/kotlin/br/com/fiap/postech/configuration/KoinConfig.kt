@@ -11,10 +11,13 @@ import br.com.fiap.postech.infrastructure.persistence.OrderFacade
 import br.com.fiap.postech.infrastructure.persistence.OrderFacadeImpl
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.config.ApplicationConfig
 import java.net.URI
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
@@ -55,8 +58,14 @@ private fun module(config: ApplicationConfig ) = module {
         install(Logging) {
             level = LogLevel.INFO
         }
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+            })
+        }
     }
 
+    single <SqsGateway> { SqsClientGateway(get(), awsConfiguration) }
     single<HttpClient> { client }
     single<OrderFacade> { OrderFacadeImpl() }
     single<OrderGateway> { OrderGatewayImpl(get()) }
@@ -66,7 +75,7 @@ private fun module(config: ApplicationConfig ) = module {
     single<CustomerGateway> { CustomerClientGateway(get(), customerServiceURL) }
     single { OrderCheckoutInteract(get(), get(), get(), get(), get()) }
     single { GetOrderInteract(get()) }
-    single { UpdateOrderStatusInteract(get()) }
+    single { UpdateOrderStatusInteract(get(), get()) }
     single { CreatePaymentInteract(get()) }
     single { PaymentStatusUpdateListener(get(), awsConfiguration, get()) }
 }

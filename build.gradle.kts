@@ -71,6 +71,7 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("org.postgresql:postgresql:$postgresql_version")
     implementation("software.amazon.awssdk:sqs:2.17.89")
+    implementation("io.ktor:ktor-client-content-negotiation-jvm")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")

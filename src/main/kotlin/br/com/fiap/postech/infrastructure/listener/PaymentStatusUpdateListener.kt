@@ -2,6 +2,7 @@ package br.com.fiap.postech.infrastructure.listener
 
 import br.com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
 import br.com.fiap.postech.configuration.AwsConfiguration
+import br.com.fiap.postech.domain.exceptions.OrderNotCreatedInKitchen
 import br.com.fiap.postech.infrastructure.listener.dto.PaymentStatusUpdateDTO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +37,7 @@ class PaymentStatusUpdateListener(
                     for (message in messages) {
                         println("Received message: ${message.body()}")
                         val paymentStatus = Json.decodeFromString<PaymentStatusUpdateDTO>(message.body())
+
                         updateOrderStatusInteract.updateOrderStatus(paymentStatus.orderId.toString(), paymentStatus.status)
                         val deleteMessageRequest = DeleteMessageRequest.builder()
                             .queueUrl(queueUrl)

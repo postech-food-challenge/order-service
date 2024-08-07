@@ -4,12 +4,12 @@ services:
   db:
     image: postgres:alpine
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: orders
       POSTGRES_USER: food-challenge
       POSTGRES_PASSWORD: root
-#
+
   localstack:
     image: "localstack/localstack"
     ports:
