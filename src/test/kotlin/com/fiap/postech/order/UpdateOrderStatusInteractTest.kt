@@ -47,7 +47,6 @@ class UpdateOrderStatusInteractTest {
             val newStatus = OrderStatus.COMPLETED.name
             val updatedOrder = existingOrder.withUpdatedStatus(newStatus)
 
-            doNothing().whenever(sqsGateway.startOrderPreparation(any()))
             whenever(orderGateway.findById(orderId)).thenReturn(existingOrder)
             whenever(orderGateway.save(any())).thenReturn(updatedOrder)
 
@@ -70,7 +69,6 @@ class UpdateOrderStatusInteractTest {
             )
             val invalidStatus = "INVALID_STATUS"
 
-            doNothing().whenever(sqsGateway.startOrderPreparation(any()))
             whenever(orderGateway.findById(orderId)).thenReturn(existingOrder)
 
             assertThrows<InvalidParameterException> {
