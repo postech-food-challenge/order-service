@@ -1,6 +1,7 @@
 package br.com.fiap.postech
 
 import br.com.fiap.postech.configuration.*
+import br.com.fiap.postech.infrastructure.listener.OrderReadyListener
 import br.com.fiap.postech.infrastructure.listener.PaymentStatusUpdateListener
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
@@ -19,4 +20,7 @@ fun Application.module() {
 
     val paymentStatusUpdateListener by inject<PaymentStatusUpdateListener>()
     paymentStatusUpdateListener.startListening()
+
+    val orderReadyListener by inject<OrderReadyListener>()
+    orderReadyListener.startListening()
 }
