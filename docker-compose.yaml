@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:alpine
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_DB: orders
       POSTGRES_USER: food-challenge
@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     platform: linux/amd64
     ports:
-      - "8080:8080"
+      - "8085:8085"
     environment:
       DB_HOST: db
       DB_PORT: 5432
