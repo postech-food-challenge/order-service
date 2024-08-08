@@ -13,6 +13,7 @@ object Orders : LongIdTable("orders") {
     val paymentValidated = bool("payment_validated").nullable()
     val price = integer("price").nullable()
     val qrData = varchar("qr_data", 255).nullable()
+    val orderItemsJson = varchar("order_items_json", 1000)
 
     fun fromDomain(domainObject: Order): OrderEntity {
         return OrderEntity(
@@ -22,7 +23,8 @@ object Orders : LongIdTable("orders") {
             createdAt = domainObject.createdAt,
             paymentValidated = domainObject.paymentValidated,
             price = domainObject.price,
-            qrData = domainObject.qrData
+            qrData = domainObject.qrData,
+            orderItemsJson = domainObject.orderItemsJson
         )
     }
 }
@@ -34,7 +36,8 @@ data class OrderEntity(
     val createdAt: LocalDateTime,
     val paymentValidated: Boolean?,
     val price: Int?,
-    val qrData: String?
+    val qrData: String?,
+    val orderItemsJson: String
 ) {
     companion object {
         fun fromDomain(domainObject: Order): OrderEntity {
@@ -45,7 +48,8 @@ data class OrderEntity(
                 createdAt = domainObject.createdAt,
                 paymentValidated = domainObject.paymentValidated,
                 price = domainObject.price,
-                qrData = domainObject.qrData
+                qrData = domainObject.qrData,
+                orderItemsJson = domainObject.orderItemsJson
             )
         }
     }

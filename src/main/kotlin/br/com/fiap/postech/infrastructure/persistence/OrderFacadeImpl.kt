@@ -21,7 +21,8 @@ class OrderFacadeImpl : OrderFacade {
                 createdAt = row[Orders.createdAt],
                 paymentValidated = row[Orders.paymentValidated],
                 price = row[Orders.price],
-                qrData = row[Orders.qrData]
+                qrData = row[Orders.qrData],
+                orderItemsJson = row[Orders.orderItemsJson]
             )
         }
     }
@@ -35,6 +36,7 @@ class OrderFacadeImpl : OrderFacade {
             it[paymentValidated] = order.paymentValidated
             it[price] = order.price
             it[qrData] = order.qrData
+            it[orderItemsJson] = order.orderItemsJson
         }
 
         order

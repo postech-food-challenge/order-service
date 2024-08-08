@@ -14,3 +14,6 @@ data:
   KITCHEN_SERVICE_HOST: "http://tech-challenge.kitchen.cluster.local:8080/v1/orders"
   PAYMENT_SERVICE_HOST: "http://tech-challenge.payment-service.cluster.local:8080/v1/orders"
   CUSTOMER_SERVICE_HOST: "http://tech-challenge.customer-service.cluster.local:8080"
+  PAYMENT_STATUS_UPDATED_QUEUE_URL: ""
+  ORDER_READY_QUEUE_URL: ""
+  START_PREPARATION_QUEUE_URL: ""

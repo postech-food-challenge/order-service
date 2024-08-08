@@ -14,6 +14,8 @@ import br.com.fiap.postech.domain.exceptions.PaymentNotCreatedException
 import br.com.fiap.postech.infrastructure.controller.dto.CheckoutRequest
 import br.com.fiap.postech.infrastructure.controller.dto.OrderResponse
 import java.util.UUID
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class OrderCheckoutInteract(
     private val orderGateway: OrderGateway,
@@ -24,31 +26,28 @@ class OrderCheckoutInteract(
 ) {
 
     suspend fun checkout(request: CheckoutRequest): OrderResponse {
-        val customerCpf = request.cpf?.toCpf()
+       // val customerCpf = request.cpf?.toCpf()
         val orderUuid = UUID.randomUUID()
 
-        customerCpf?.runCatching { customerGateway.checkCustomer(this.value) }
-            ?.onFailure { throw CustomerNotFound("Customer with CPF ${customerCpf.value} not found") }
+//        customerCpf?.runCatching { customerGateway.checkCustomer(this.value) }
+//            ?.onFailure { throw CustomerNotFound("Customer with CPF ${customerCpf.value} not found") }
 
         val orderItems = request.items.map { orderItemRequest ->
-            productGateway.getProduct(orderItemRequest.productId).let {
+            //productGateway.getProduct(orderItemRequest.productId).let {
                 OrderItem.create(
                     orderItemRequest.productId,
                     orderItemRequest.quantity,
                     orderItemRequest.observations,
                     orderItemRequest.toGo,
-                    it.price
+                    10
                 )
-            }
+            //}
         }
 
         val createPaymentResponse = runCatching { createPaymentInteract.createPayment(orderItems, orderUuid) }
             .getOrElse { throw PaymentNotCreatedException("Error while creating payment. Order $orderUuid not created") }
 
-        runCatching { kitchenGateway.startPreparation(orderUuid, orderItems) }
-            .onFailure { throw OrderNotCreatedInKitchen("Error while sending to kitchen. Order $orderUuid not created") }
-
-        return Order.createOrder(orderUuid, customerCpf, createPaymentResponse).run {
+        return Order.createOrder(orderUuid, null, createPaymentResponse, Json.encodeToString(orderItems)).run {
             orderGateway.save(this)
         }.let {
             OrderResponse.fromDomain(it)

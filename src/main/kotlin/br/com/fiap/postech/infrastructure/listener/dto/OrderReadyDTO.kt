@@ -1,13 +1,12 @@
-package br.com.fiap.postech.infrastructure.client.payment
+package br.com.fiap.postech.infrastructure.listener.dto
 
 import br.com.fiap.postech.configuration.utils.UUIDSerializer
 import java.util.UUID
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CreatePaymentResponse (
-    val totalAmount: Int,
-    val qrData: String,
+data class OrderReadyDTO (
     @Serializable(with = UUIDSerializer::class)
-    val orderId: UUID
+    val orderId: UUID,
+    val status: String
 )

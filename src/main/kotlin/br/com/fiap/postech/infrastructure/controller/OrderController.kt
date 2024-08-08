@@ -47,7 +47,6 @@ private fun Route.updateOrder() {
     patch("/{orderId}") {
         val orderId = getUuidOrThrow("orderId")
         val request = call.receive<OrderStatusRequest>()
-
         call.respond(HttpStatusCode.OK, updateOrderStatusInteract.updateOrderStatus(orderId, request.status))
     }
 }

@@ -1,8 +1,10 @@
 package com.fiap.postech.order
 
 import br.com.fiap.postech.application.gateways.OrderGateway
+import br.com.fiap.postech.application.gateways.SqsGateway
 import br.com.fiap.postech.application.usecases.order.UpdateOrderStatusInteract
 import br.com.fiap.postech.domain.entities.Order
+import br.com.fiap.postech.domain.entities.OrderItem
 import br.com.fiap.postech.domain.entities.OrderStatus
 import br.com.fiap.postech.domain.exceptions.InvalidParameterException
 import kotlinx.coroutines.runBlocking
@@ -17,16 +19,21 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.time.LocalDateTime
 import java.util.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.mockito.kotlin.doNothing
 
 class UpdateOrderStatusInteractTest {
 
     private lateinit var orderGateway: OrderGateway
     private lateinit var updateOrderStatusInteract: UpdateOrderStatusInteract
+    private lateinit var sqsGateway: SqsGateway
 
     @BeforeEach
     fun setUp() {
         orderGateway = mock{}
-        updateOrderStatusInteract = UpdateOrderStatusInteract(orderGateway)
+        sqsGateway = mock{}
+        updateOrderStatusInteract = UpdateOrderStatusInteract(orderGateway, sqsGateway)
     }
 
     @Test
@@ -34,7 +41,8 @@ class UpdateOrderStatusInteractTest {
         runBlocking {
             val orderId = UUID.randomUUID().toString()
             val existingOrder = Order(id = orderId, status = OrderStatus.CREATED,
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now(),
+                orderItemsJson = creteListOfOrderItemJson()
             )
             val newStatus = OrderStatus.COMPLETED.name
             val updatedOrder = existingOrder.withUpdatedStatus(newStatus)
@@ -56,7 +64,8 @@ class UpdateOrderStatusInteractTest {
         runBlocking {
             val orderId = UUID.randomUUID().toString()
             val existingOrder = Order(id = orderId, status = OrderStatus.CREATED,
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now(),
+                orderItemsJson = creteListOfOrderItemJson()
             )
             val invalidStatus = "INVALID_STATUS"
 
@@ -67,4 +76,25 @@ class UpdateOrderStatusInteractTest {
             }
         }
     }
+
+    private fun creteListOfOrderItemJson() = Json.encodeToString(
+        listOf(
+            OrderItem(
+                productId = 1,
+                observations = "Item 1",
+                price = 10,
+                quantity = 1,
+                toGo = false
+            ),
+            OrderItem(
+                productId = 2,
+                observations = "Item 2",
+                price = 10,
+                quantity = 2,
+                toGo = false
+            )
+        )
+    )
+
+
 }
