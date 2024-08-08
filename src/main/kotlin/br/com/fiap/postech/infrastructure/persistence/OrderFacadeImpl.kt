@@ -7,6 +7,7 @@ import br.com.fiap.postech.infrastructure.persistence.entities.Orders
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 
 class OrderFacadeImpl : OrderFacade {
 
@@ -41,6 +42,14 @@ class OrderFacadeImpl : OrderFacade {
 
         order
     } ?: throw DatabaseOperationException("Failed to insert order")
+
+    override suspend fun update(order: OrderEntity): OrderEntity = dbQuery {
+        Orders.update({ Orders.orderId eq order.id }) {
+            it[status] = order.status
+        }
+
+        order
+    } ?: throw DatabaseOperationException("Failed to update order")
 
     override suspend fun findById(id: String): OrderEntity? = dbQuery {
         Orders

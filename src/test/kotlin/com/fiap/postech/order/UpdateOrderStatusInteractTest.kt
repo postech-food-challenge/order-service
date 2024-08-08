@@ -8,6 +8,8 @@ import br.com.fiap.postech.domain.entities.OrderItem
 import br.com.fiap.postech.domain.entities.OrderStatus
 import br.com.fiap.postech.domain.exceptions.InvalidParameterException
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -19,9 +21,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.time.LocalDateTime
 import java.util.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.mockito.kotlin.doNothing
 
 class UpdateOrderStatusInteractTest {
 
@@ -31,8 +30,8 @@ class UpdateOrderStatusInteractTest {
 
     @BeforeEach
     fun setUp() {
-        orderGateway = mock{}
-        sqsGateway = mock{}
+        orderGateway = mock {}
+        sqsGateway = mock {}
         updateOrderStatusInteract = UpdateOrderStatusInteract(orderGateway, sqsGateway)
     }
 
@@ -40,7 +39,8 @@ class UpdateOrderStatusInteractTest {
     fun `should update order status when order exists`() {
         runBlocking {
             val orderId = UUID.randomUUID().toString()
-            val existingOrder = Order(id = orderId, status = OrderStatus.CREATED,
+            val existingOrder = Order(
+                id = orderId, status = OrderStatus.CREATED,
                 createdAt = LocalDateTime.now(),
                 orderItemsJson = creteListOfOrderItemJson()
             )
@@ -48,13 +48,13 @@ class UpdateOrderStatusInteractTest {
             val updatedOrder = existingOrder.withUpdatedStatus(newStatus)
 
             whenever(orderGateway.findById(orderId)).thenReturn(existingOrder)
-            whenever(orderGateway.save(any())).thenReturn(updatedOrder)
+            whenever(orderGateway.update(any())).thenReturn(updatedOrder)
 
             val result = updateOrderStatusInteract.updateOrderStatus(orderId, newStatus)
 
             Assertions.assertNotNull(result)
             assertEquals(OrderStatus.COMPLETED.name, result.status)
-            verify(orderGateway).save(updatedOrder)
+            verify(orderGateway).update(updatedOrder)
         }
     }
 
@@ -63,7 +63,8 @@ class UpdateOrderStatusInteractTest {
     fun `should throw InvalidParameterException for invalid order status`() {
         runBlocking {
             val orderId = UUID.randomUUID().toString()
-            val existingOrder = Order(id = orderId, status = OrderStatus.CREATED,
+            val existingOrder = Order(
+                id = orderId, status = OrderStatus.CREATED,
                 createdAt = LocalDateTime.now(),
                 orderItemsJson = creteListOfOrderItemJson()
             )
