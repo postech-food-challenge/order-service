@@ -6,6 +6,8 @@ interface OrderFacade {
 
     suspend fun insert(order: OrderEntity): OrderEntity
 
+    suspend fun update(order: OrderEntity): OrderEntity
+
     suspend fun findById(id: String): OrderEntity?
 
 }
